@@ -32,7 +32,7 @@ namespace Sessions.Controllers
                 }
                 else return "Couldn't find product";
             }
-            return "Session is empty";
+            return "ShoppingCart is empty";
         }
 
 
