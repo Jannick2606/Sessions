@@ -12,15 +12,21 @@ namespace Sessions.Controllers
         {
             if (HttpContext.Session.GetObjectFromJson<IEnumerable<Product>>("ShoppingCart") != null)
             {
-                Product removedProduct = new Product();
+                bool wasRemoved = false;
+                Product productToRemove = new Product();
                 List<Product> products = (List<Product>)HttpContext.Session.GetObjectFromJson<IEnumerable<Product>>("ShoppingCart")!;
                 foreach (Product product in products)
                 {
-                    if(product.Name == name.ToLower()) removedProduct = product;
+                    if(product.Name == name.ToLower()) productToRemove = product;
+                    wasRemoved = true;
                 }
-                products.Remove(removedProduct);
-                HttpContext.Session.SetObjectAsJson("ShoppingCart", products);
-                return $"{removedProduct.Name} was removed";
+                if (wasRemoved)
+                {
+                    products.Remove(productToRemove);
+                    HttpContext.Session.SetObjectAsJson("ShoppingCart", products);
+                    return $"{productToRemove.Name} was removed";
+                }
+                else return "Couldn't find product";
             }
             return "Session is empty";
         }
